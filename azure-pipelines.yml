@@ -1,0 +1,28 @@
+trigger:
+- main
+
+stages:
+- stage: DeployToVM
+  jobs:
+  - deployment: DeployWebsite
+    displayName: "Desplegar Página Web"
+
+    environment:
+      name: "Admin-VM" # Nombre de tu entorno
+      resourceType: VirtualMachine # Tipo de recurso, en este caso una máquina virtual
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: |
+              echo "Desplegando página web..."
+
+              # Copiar el archivo index.html a la carpeta de Apache
+              sudo cp $(System.DefaultWorkingDirectory)/index.html /var/www/html/
+
+              # Reiniciar Apache para aplicar cambios, si es necesario
+              sudo systemctl restart apache2
+
+              echo "Página web desplegada exitosamente."
+            displayName: "Copiar Archivo y Reiniciar Apache"
