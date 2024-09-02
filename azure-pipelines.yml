@@ -1,28 +1,25 @@
 trigger:
-- main
+  branches:
+    include:
+      - main
 
-stages:
-- stage: DeployToVM
-  jobs:
-  - deployment: DeployWebsite
-    displayName: "Desplegar Página Web"
+variables:
+  # Variables de entorno
+  ACR_NAME: 'registroContenedorExp2S4' # Colocar el nombre de tu ACR
+  IMAGE_NAME: 'myapp-nginx-s4' # Colocar el Nombre de Imagen
+  SERVICE_CONNECTION_NAME: 'exp2-s4-docker-connection' # Colocar nombre del Service Connection ubicado en Docker Registry-- Azure Container Registry
 
-    environment:
-      name: "Admin-VM" # Nombre de tu entorno
-      resourceType: VirtualMachine # Tipo de recurso, en este caso una máquina virtual
-
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - script: |
-              echo "Desplegando página web..."
-
-              # Copiar el archivo index.html a la carpeta de Apache
-              sudo cp $(System.DefaultWorkingDirectory)/index.html /var/www/html/
-
-              # Reiniciar Apache para aplicar cambios, si es necesario
-              sudo systemctl restart apache2
-
-              echo "Página web desplegada exitosamente."
-            displayName: "Copiar Archivo y Reiniciar Apache"
+jobs:
+  - job: BuildAndPush
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: Docker@2
+        inputs:
+          command: 'buildAndPush'
+          containerRegistry: '$(SERVICE_CONNECTION_NAME)'
+          repository: '$(ACR_NAME).azurecr.io/$(IMAGE_NAME)'
+          dockerfile: '**/Dockerfile'
+          tags: |
+            latest
+        displayName: 'Build and Push Docker Image'
