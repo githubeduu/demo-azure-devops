@@ -7,7 +7,7 @@ variables:
   # Variables de entorno
   ACR_NAME: 'myappdevop' # Colocar el nombre de tu ACR
   IMAGE_NAME: 'myapp-nginx-s6' # Colocar el Nombre de Imagen
-  SERVICE_CONNECTION_NAME: 'exp2_S6'
+  SERVICE_CONNECTION_NAME: 'exp2_S6_docker'
 
 jobs:
   - job: BuildAndPush
