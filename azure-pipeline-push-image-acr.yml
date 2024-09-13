@@ -5,9 +5,9 @@ trigger:
 
 variables:
   # Variables de entorno
-  ACR_NAME: 'appdevopss4' # Colocar el nombre de tu ACR
-  IMAGE_NAME: 'myapp-nginx-s4' # Colocar el Nombre de Imagen
-  SERVICE_CONNECTION_NAME: 'taller-devops'
+  ACR_NAME: 'myappdevop' # Colocar el nombre de tu ACR
+  IMAGE_NAME: 'myapp-nginx-s6' # Colocar el Nombre de Imagen
+  SERVICE_CONNECTION_NAME: 'exp2_S6'
 
 jobs:
   - job: BuildAndPush
